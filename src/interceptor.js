@@ -1,8 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 const setupInterceptors = () => {
-  const { token } = JSON.parse(localStorage.getItem('token')) || {};
-
+  const token = localStorage.getItem('token');
   axios.interceptors.request.use(
     (config) => {
       if (token) {
