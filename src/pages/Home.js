@@ -10,7 +10,7 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/api/car/getAllCar');
+        const response = await axios.get('http://localhost:8081/car/getAllCar');
         setCars(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
