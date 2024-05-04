@@ -4,9 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AuthProvider} from "./components/AuthProvider";
-import setupInterceptors from './interceptor';
-
-setupInterceptors();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

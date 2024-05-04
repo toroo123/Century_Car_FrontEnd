@@ -7,12 +7,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
-  const [user, setUser] = useState(localStorage.getItem('user') || {})
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {})
+
   const login = async (email, password) => {
     const response = await axios.post('http://localhost:8081/auth/signin', { email, password });
     localStorage.setItem('token', response.data.jwt);
     localStorage.setItem('userName', response.data.user.fullName);
-    localStorage.setItem('user', response.data.user);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
     setUser(response.data.user)
     setUserName(response.data.user.fullName)
     setToken(response.data.jwt);
@@ -21,6 +22,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('user');
     setToken(null);
     setIsLoggedIn(false);
     setUserName('');

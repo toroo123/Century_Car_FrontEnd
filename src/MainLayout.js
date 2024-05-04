@@ -1,6 +1,8 @@
 import Header from "./main/Header";
 import Footer from "./main/Footer";
+import setupInterceptors from './interceptor';
 
+setupInterceptors();
 
 const MainLayout = ({ children }) => {
   return (

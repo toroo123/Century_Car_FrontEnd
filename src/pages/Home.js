@@ -1,9 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Car from "../components/Car";
+import {useAuth} from "../components/AuthProvider";
 
 function Home() {
-  const [cars, setCars] = useState({})
+  const {user} = useAuth()
+  console.log(user?.role)
+  const [cars, setCars] = useState([])
   useEffect(() => {
     const fetchData = async () => {
       try {
