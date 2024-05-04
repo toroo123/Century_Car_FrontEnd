@@ -1,11 +1,12 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import LoginPage from "./components/pages/Login";
-import SignupPage from "./components/pages/SignUp";
-import Home from "./components/pages/Home";
-import MainLayout from "./components/MainLayout";
-import Guide from "./components/pages/Guide";
-import About from "./components/pages/About";
+import LoginPage from "./pages/Login";
+import SignupPage from "./pages/SignUp";
+import Home from "./pages/Home";
+import MainLayout from "./MainLayout";
+import Guide from "./pages/Guide";
+import About from "./pages/About";
+import Favorite from "./pages/Favorite";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signup" element={ <MainLayout><SignupPage/></MainLayout>} />
           <Route path="/guide" element={<MainLayout><Guide/></MainLayout>}/>
           <Route path="/about" element={<MainLayout><About/></MainLayout>}/>
+          <Route path="/favorite" element={<MainLayout><Favorite/></MainLayout>}/>
         </Routes>
       </Router>
     </div>

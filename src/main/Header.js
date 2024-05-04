@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../App.css'
+import '../App.css'
 
 const Header = () => {
 
@@ -32,7 +32,13 @@ const Header = () => {
                 </button>
               </a>
             </div>
-
+            <div>
+              <a href="/favorite">
+                <button>
+                  Хадгалсан машин
+                </button>
+              </a>
+            </div>
           </div>
         </div>
       </div>
