@@ -27,11 +27,15 @@ const Header = () => {
               </a>
             </div>
             <div>
-              <a href="/login">
-                <button>
-                  {isLoggedIn ? userName : 'Нэвтрэх'}
-                </button>
-              </a>
+              {
+                isLoggedIn ?
+                  <div>{userName}</div> :
+                  <a href="/login">
+                    <button>
+                      Нэвтрэх
+                    </button>
+                  </a>
+              }
             </div>
             <div>
               <a href="/favorite">
