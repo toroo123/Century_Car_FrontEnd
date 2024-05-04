@@ -8,7 +8,6 @@ function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('ROLE_CUSTOMER');
   const [mobile, setMobileNumber] = useState('');
   const [error, setError] = useState(''); // State to manage error messages
   const history = useNavigate(); // Get the history object for redirection
@@ -34,7 +33,7 @@ function SignupPage() {
       });
       // Handle successful signup
       console.log(response.data);
-      history('/dashboard');
+      history('/');
     } catch (error) {
       // Handle signup error
       console.error('Signup failed:', error.response ? error.response.data : error.message);

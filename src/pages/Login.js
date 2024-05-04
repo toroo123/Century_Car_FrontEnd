@@ -3,6 +3,7 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import {Button, Input} from "@nextui-org/react";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
+import {useAuth} from "../components/AuthProvider";
 
 
 function LoginPage() {
@@ -12,16 +13,15 @@ function LoginPage() {
   const history = useNavigate();
   const [isVisible, setIsVisible] = React.useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-
+  const { login } = useAuth();
   const handleLogin = async () => {
     try {
       if (!email || !password) {
         setError('Please enter both username and password.');
         return;
       }
-
-      const response = await axios.post('http://localhost:8081/auth/signin', { email, password });
-      console.log('Login successful:', response.data);
+      login(email, password)
+      history("/")
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
       setError('Invalid username or password.');

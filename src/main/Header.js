@@ -1,8 +1,9 @@
 import React from 'react'
 import '../App.css'
+import {useAuth} from "../components/AuthProvider";
 
 const Header = () => {
-
+  const {isLoggedIn, userName, logout} = useAuth();
   return (
     <>
       <div className='headers'>
@@ -28,7 +29,7 @@ const Header = () => {
             <div>
               <a href="/login">
                 <button>
-                  Нэвтрэх
+                  {isLoggedIn ? userName : 'Нэвтрэх'}
                 </button>
               </a>
             </div>
@@ -39,6 +40,9 @@ const Header = () => {
                 </button>
               </a>
             </div>
+            {isLoggedIn && <div className="ml-10">
+              <button onClick={logout}>Гарах</button>
+            </div>}
           </div>
         </div>
       </div>
