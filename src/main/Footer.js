@@ -1,9 +1,11 @@
+import './main.css';
 function Footer(){
 
 
-
   return (
-    <p>THis is footer</p>
+    <div className=''>
+      <p>©CENTURY CAR</p>
+    </div>
   )
 }
 

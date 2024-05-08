@@ -1,0 +1,44 @@
+.loginBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(37, 40, 75, 0.9);
+    border-radius: 10px;
+}
+
+.login{
+    padding: 2.5rem 2rem;
+    width: 30rem;
+    max-height: calc(-3rem + 100vh);
+    text-align: start;
+    border-radius: 7px;
+}
+
+
+.inputSel {
+    margin-top: 10px !important;
+    padding: 8px 10px !important;
+    background-color: transparent !important;
+    color: white !important;
+}
+::placeholder {
+    color: rgba(189, 189, 189, 0.51) !important;
+}
+.inputSel:hover{
+    background-color:transparent;
+}
+.inputSel:focus{
+    background-color:transparent;
+}
+.inputSel:active{
+    background-color:transparent;
+}
+
+@media only screen and (max-width: 1300px) {
+    .login{
+        padding: 2.5rem;
+        width: 25rem;
+        max-height: calc(-3rem + 100vh);
+
+    }
+}

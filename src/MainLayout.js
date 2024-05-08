@@ -6,22 +6,22 @@ setupInterceptors();
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100 zurag">
+    <div className="min-h-screen bg-gray-100 zurag grid content-between">
       {/* Header */}
       <header className="">
-       <Header/>
+        <Header/>
       </header>
 
       {/* Main Content */}
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div>
+        <div className="max-w-xl mx-auto py-4 sm:px-6 lg:px-4 ">
           {/* Render the children components */}
           {children}
         </div>
-      </main>
+      </div>
 
       {/* Footer */}
-      <footer className="bg-white shadow">
+      <footer className="text-white ">
         <Footer/>
       </footer>
     </div>

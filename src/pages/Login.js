@@ -1,27 +1,21 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {Button, Input} from "@nextui-org/react";
-import {FaEye, FaEyeSlash} from "react-icons/fa";
+import {EyeInvisibleTwoTone, EyeTwoTone} from '@ant-design/icons';
 import {useAuth} from "../components/AuthProvider";
-
+import './pages.css';
+import {Form, Input, Button} from "antd";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const history = useNavigate();
-  const [isVisible, setIsVisible] = React.useState(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
-  const { login } = useAuth();
-  const handleLogin = async () => {
+  const {login} = useAuth();
+
+  const onFinish = async (values) => {
+    const {email, password} = values;
     try {
-      if (!email || !password) {
-        setError('Please enter both username and password.');
-        return;
-      }
-      login(email, password)
-      history("/")
+      login(email, password);
+      history("/");
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
       setError('Invalid username or password.');
@@ -29,41 +23,54 @@ function LoginPage() {
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center h-screen">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-2/3">
-          <div className="mb-4">
-            <Input type="email" label="Email" variant="bordered" placeholder="Enter your email" value={email}
-                   onChange={(e) => setEmail(e.target.value)} className="max-w-xs"/>
-          </div>
-          <div className="mb-6">
-            <Input
-              label="Password"
-              variant="bordered"
-              placeholder="Enter your password"
-              type={isVisible ? "text" : "password"}
-              className="max-w-xs"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              endContent={
-                <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                  {isVisible ? (
-                    <FaEyeSlash/>
-                  ) : (
-                    <FaEye/>
-                  )}
-                </button>
-              }
-            />
-
-          </div>
-            <Button color="primary" onClick={handleLogin}>Нэвтрэх</Button>
-          <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/signup">
+    <div className="loginBox">
+      <div className="login">
+        <p className="text-sky-500 font-extrabold text-2xl">Нэвтрэх</p>
+        <p className="text-white py-4">Хэрэглэгчийн нэр, нууц үгээ оруулна уу.</p>
+        <Form
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="email"
+            rules={[{required: true, type: 'email', message: 'Имэйлээ оруулна уу!'}]}
+          >
+            <div className="text-sky-500 py-2">
+              <p>Имэйл</p>
+              <Input
+                type="email"
+                placeholder="Имэйлээ оруулна уу"
+                className="inputSel max-w-s placeholder-gray-400"
+              />
+            </div>
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{required: true, message: 'Нууц үгээ оруулна уу!',}]}
+          >
+            <div className="text-sky-500">
+              <p>Нууц үг</p>
+              <Input.Password
+                placeholder="Нууц үгээ оруулна уу"
+                iconRender={(visible) => (visible ? <EyeTwoTone twoToneColor="#BDBDBD"/> :
+                  <EyeInvisibleTwoTone twoToneColor="#BDBDBD"/>)}
+                className="inputSel max-w-s"
+              />
+            </div>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Нэвтрэх
+            </Button>
+          </Form.Item>
+        </Form>
+        <div className="text-white pt-3 flex justify-center">
+          <p>Энд дарж бүртгүүлнэ үү </p>
+          <a className="underline underline-offset-4 text-sky-600 ms-2" href="/signup">
             Бүртгүүлэх
           </a>
-        </form>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
