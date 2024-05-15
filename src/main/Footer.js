@@ -3,8 +3,8 @@ function Footer(){
 
 
   return (
-    <div className=''>
-      <p>©CENTURY CAR</p>
+    <div className='footer'>
+      <p>©centuryCar</p>
     </div>
   )
 }

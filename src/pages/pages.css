@@ -2,24 +2,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(37, 40, 75, 0.9);
-    border-radius: 10px;
+    background: rgb(0 0 0 / 54%);
+    border-radius: 30px;
 }
-
 .login{
     padding: 2.5rem 2rem;
-    width: 30rem;
+    width: 35rem;
     max-height: calc(-3rem + 100vh);
     text-align: start;
     border-radius: 7px;
+}
+.signIn form.ant-form.ant-form-horizontal.css-dev-only-do-not-override-1okl62o{
+    width: 25rem;
 }
 
 
 .inputSel {
     margin-top: 10px !important;
-    padding: 8px 10px !important;
+    padding: 10px 20px !important;
     background-color: transparent !important;
     color: white !important;
+    border-radius: 30px;
 }
 ::placeholder {
     color: rgba(189, 189, 189, 0.51) !important;
@@ -41,4 +44,36 @@
         max-height: calc(-3rem + 100vh);
 
     }
+}
+.title-brand {
+    max-width: 730px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    color: #ffffff;
+    display: block;
+}
+
+.presentation-title {
+    font-size: 5em;
+
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+    background: #fbf8ec;
+    background: -moz-linear-gradient(top, #ffffff 35%, #4e6773 100%);
+    background: -webkit-linear-gradient(top, #ffffff 35%, #4e6773 100%);
+    background: -ms-linear-gradient(top, #ffffff 35%, #4e6773 100%);
+    background: linear-gradient(to bottom, #ffffff 35%, #4e6773 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.presentation-subtitle {
+    font-size: 1em;
+    color: #ffffff;
+    margin-top: 10px;
+}
+button.ant-btn.css-dev-only-do-not-override-1okl62o.ant-btn-primary.ant-btn-block{
+    cursor: pointer !important;
+    border-radius: 15px !important;
 }

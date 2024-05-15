@@ -24,50 +24,49 @@ function LoginPage() {
 
   return (
     <div className="loginBox">
-      <div className="login">
+      <div className="login signIn">
         <p className="text-sky-500 font-extrabold text-2xl">Нэвтрэх</p>
-        <p className="text-white py-4">Хэрэглэгчийн нэр, нууц үгээ оруулна уу.</p>
-        <Form
-          onFinish={onFinish}
-        >
-          <Form.Item
-            name="email"
-            rules={[{required: true, type: 'email', message: 'Имэйлээ оруулна уу!'}]}
+        {/*<p className="text-white py-4">Хэрэглэгчийн нэр, нууц үгээ оруулна уу.</p>*/}
+        <div className="div-center">
+          <Form
+              onFinish={onFinish}
           >
-            <div className="text-sky-500 py-2">
-              <p>Имэйл</p>
-              <Input
-                type="email"
-                placeholder="Имэйлээ оруулна уу"
-                className="inputSel max-w-s placeholder-gray-400"
-              />
-            </div>
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{required: true, message: 'Нууц үгээ оруулна уу!',}]}
-          >
-            <div className="text-sky-500">
-              <p>Нууц үг</p>
-              <Input.Password
-                placeholder="Нууц үгээ оруулна уу"
-                iconRender={(visible) => (visible ? <EyeTwoTone twoToneColor="#BDBDBD"/> :
-                  <EyeInvisibleTwoTone twoToneColor="#BDBDBD"/>)}
-                className="inputSel max-w-s"
-              />
-            </div>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Нэвтрэх
-            </Button>
-          </Form.Item>
-        </Form>
-        <div className="text-white pt-3 flex justify-center">
-          <p>Энд дарж бүртгүүлнэ үү </p>
-          <a className="underline underline-offset-4 text-sky-600 ms-2" href="/signup">
-            Бүртгүүлэх
-          </a>
+            <Form.Item
+                name="email"
+                rules={[{required: true, type: 'email', message: 'И-мэйл хаягаа оруулна уу!'}]}
+            >
+              <div className="text-sky-500 py-2">
+                {/*<p>Имэйл</p>*/}
+                <Input
+                    type="email"
+                    placeholder="И-мэйл хаяг"
+                    className="inputSel max-w-s placeholder-gray-400"
+                />
+              </div>
+            </Form.Item>
+            <Form.Item
+                name="password"
+                rules={[{required: true, message: 'Нууц үгээ оруулна уу!',}]}
+            >
+              <div className="text-sky-500">
+                {/*<p>Нууц үг</p>*/}
+                <Input.Password
+                    placeholder="Нууц үг"
+                    iconRender={(visible) => (visible ? <EyeTwoTone twoToneColor="#BDBDBD"/> :
+                        <EyeInvisibleTwoTone twoToneColor="#BDBDBD"/>)}
+                    className="inputSel max-w-s"
+                />
+              </div>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Нэвтрэх
+              </Button>
+            </Form.Item>
+            <a className="underline underline-offset-4 text-sky-600 ms-2 text-align-right flex justify-right" href="/signup">
+              Бүртгүүлэх
+            </a>
+          </Form>
         </div>
       </div>
     </div>

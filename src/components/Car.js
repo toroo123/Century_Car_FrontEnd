@@ -1,19 +1,16 @@
 import {Carousel} from "antd";
 import './component.css';
-export default function Car({cars}){
+import {useEffect} from "react";
+export default function Car(car, index){
+    useEffect(() => {
+        console.log("Car==========", car)
+    }, []);
   return (
-    
-  <Carousel arrows>
-      {cars?.map((car, index) => 
-        <div key={index} className="contentStyle">
-          <div className="grid justify-center align-top">
-            <img width={220}
-              src={`${car.base64Url}`}
-              alt=""/>
-            <p>{car.name}</p>
-          </div>
-        </div>
-      )}
-  </Carousel>
+      <div className="carProf">
+          <img width={220}
+               src={`${car.car.base64Url}`}
+               alt=""/>
+          <p>{car.car.name}</p>
+      </div>
   )
 }

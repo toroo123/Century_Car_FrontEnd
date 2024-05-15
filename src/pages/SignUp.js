@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import {Button, Input} from "antd";
+import {Button, Col, Input, Row} from "antd";
 import {Form} from "antd";
 import './pages.css'
 
@@ -38,66 +38,79 @@ function SignupPage() {
 
   return (
     <div className="loginBox">
-      <div className="login">
+      <div className="login signup">
         <p className="text-sky-500 font-extrabold text-2xl pb-4">Бүртгүүлэх</p>
         {error && <p className="text-red-500">{error}</p>}
         <Form onFinish={handleSignup}>
-          <Form.Item
-            name="fullName"
-            rules={[{required: true, message: 'Нэвтрэх нэрээ оруулна уу!'}]}
-          >
-            <div className="text-sky-500">
-              <p>Нэвтрэх нэр</p>
-              <Input placeholder="Нэвтрэх нэр" className="inputSel max-w-s placeholder-gray-400"/>
-            </div>
-          </Form.Item>
-          <Form.Item
-            name="email"
-            rules={[{required: true, type: 'email', message: 'Имэйлээ оруулна уу!'}]}
-          >
-            <div className="text-sky-500">
-              <p>Имэйл</p>
-              <Input placeholder="Имэйл хаяг" className="inputSel max-w-s placeholder-gray-400"/>
-            </div>
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{required: true, message: 'Нууц үгээ оруулна уу!'}]}
-          >
-            <div className="text-sky-500">
-              <p>Нууц үг</p>
-              <Input.Password placeholder="Нууц үг" className="inputSel max-w-s placeholder-gray-400"/>
-            </div>
-          </Form.Item>
-          <Form.Item
-            name="confirmPassword"
-            dependencies={['password']}
-            rules={[
-              {required: true, message: 'Нууц үгээ баталгаажуулна уу!'},
-              ({getFieldValue}) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('Таны оруулсан хоёр нууц үг таарахгүй байна!'));
-                },
-              }),
-            ]}
-          >
-            <div className="text-sky-500">
-              <p>Нууц үгээ давтах</p>
-              <Input.Password placeholder="Нууц үгээ баталгаажуулах" className="inputSel max-w-s placeholder-gray-400"/>
-            </div>
-          </Form.Item>
-          <Form.Item
-            name="mobile"
-            rules={[{required: true, message: 'Утасны дугаараа оруулна уу!'}]}
-          >
-            <div className="text-sky-500">
-              <p>Утасны дугаар</p>
-              <Input placeholder="Утасны дугаар" className="inputSel max-w-s placeholder-gray-400"/>
-            </div>
-          </Form.Item>
+          <Row gutter={[40,0]}>
+            <Col span={12}>
+              <Form.Item
+                  name="fullName"
+                  rules={[{required: true, message: 'Нэвтрэх нэрээ оруулна уу!'}]}
+              >
+                <div className="text-sky-500">
+                  {/*<p>Нэвтрэх нэр</p>*/}
+                  <Input placeholder="Нэвтрэх нэр" className="inputSel max-w-s placeholder-gray-400"/>
+                </div>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                  name="email"
+                  rules={[{required: true, type: 'email', message: 'Имэйлээ оруулна уу!'}]}
+              >
+                <div className="text-sky-500">
+                  {/*<p>Имэйл</p>*/}
+                  <Input placeholder="Имэйл хаяг" className="inputSel max-w-s placeholder-gray-400"/>
+                </div>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                  name="password"
+                  rules={[{required: true, message: 'Нууц үгээ оруулна уу!'}]}
+              >
+                <div className="text-sky-500">
+                  {/*<p>Нууц үг</p>*/}
+                  <Input.Password placeholder="Нууц үг" className="inputSel max-w-s placeholder-gray-400"/>
+                </div>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                  name="confirmPassword"
+                  dependencies={['password']}
+                  rules={[
+                    {required: true, message: 'Нууц үгээ баталгаажуулна уу!'},
+                    ({getFieldValue}) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Таны оруулсан хоёр нууц үг таарахгүй байна!'));
+                      },
+                    }),
+                  ]}
+              >
+                <div className="text-sky-500">
+                  {/*<p>Нууц үгээ давтах</p>*/}
+                  <Input.Password placeholder="Нууц үгээ баталгаажуулах" className="inputSel max-w-s placeholder-gray-400"/>
+                </div>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                  name="mobile"
+                  rules={[{required: true, message: 'Утасны дугаараа оруулна уу!'}]}
+              >
+                <div className="text-sky-500">
+                  {/*<p>Утасны дугаар</p>*/}
+                  <Input placeholder="Утасны дугаар" className="inputSel max-w-s placeholder-gray-400"/>
+                </div>
+              </Form.Item>
+            </Col>
+          </Row>
+
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
               Бүртгүүлэх
