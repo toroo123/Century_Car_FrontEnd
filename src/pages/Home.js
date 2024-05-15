@@ -21,9 +21,9 @@ function Home() {
   }, []);
   return (
     <ul>
-      {cars.map((car, index) => (
-        <Car car={car} key={index}/>
-      ))}
+      {/* {cars.map((car, index) => ( */}
+        <Car cars={cars}/>
+      {/* ))} */}
     </ul>
   )
 }

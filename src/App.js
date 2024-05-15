@@ -7,7 +7,7 @@ import MainLayout from "./MainLayout";
 import Guide from "./pages/Guide";
 import About from "./pages/About";
 import Favorite from "./pages/Favorite";
-
+import CarForm from "./components/CarForm";
 
 function App() {
   return (
@@ -19,7 +19,8 @@ function App() {
           <Route path="/signup" element={ <MainLayout><SignupPage/></MainLayout>} />
           <Route path="/guide" element={<MainLayout><Guide/></MainLayout>}/>
           <Route path="/about" element={<MainLayout><About/></MainLayout>}/>
-          <Route path="/favorite" element={<MainLayout><Favorite/></MainLayout>}/>
+          {/* <Route path="/favorite" element={<MainLayout><Favorite/></MainLayout>}/> */}
+          <Route path="/CarForm" element={<MainLayout><CarForm/></MainLayout>}/>
         </Routes>
       </Router>
     </div>

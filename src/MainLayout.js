@@ -14,7 +14,7 @@ const MainLayout = ({ children }) => {
 
       {/* Main Content */}
       <div>
-        <div className="max-w-xl mx-auto py-4 sm:px-6 lg:px-4 ">
+        <div className="max-w-2xl mx-auto py-4 sm:px-6 lg:px-4 ">
           {/* Render the children components */}
           {children}
         </div>
