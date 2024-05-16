@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Image, Upload, Form, Input, Button, Col, Row, Select, Option} from 'antd';
 import carJson from '../json/car.json';
+import typeJson from '../json/type.json';
 import axios from 'axios';
 import contextLogin from '../ContextLogin';
 
@@ -20,6 +21,7 @@ const CarForm = () => {
   const [fileList, setFileList] = useState([]);
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const [models, setModels] = useState([]);
 
   const handlePreview = async (file) => {
@@ -43,8 +45,8 @@ const CarForm = () => {
       </div>
     </button>
   );
-
   const makes = [...new Set(carJson.map((item) => item.make))];
+  const types = [...new Set(typeJson.map((item) => item.type))];
 
   const onFinish = async(formValue) => {
     try {
@@ -54,6 +56,7 @@ const CarForm = () => {
       });
       formData.append("brandType", formValue.brandType);
       formData.append("name", formValue.name);
+      formData.append("type", formValue.type);
 
        await axios.post('http://localhost:8081/car/upload', formData)
       .then((result) => {
@@ -66,93 +69,117 @@ const CarForm = () => {
   };
   
   const handleMakeChange = (value) => {
-    const filteredModels = carJson
-      .filter((item) => item.make === value)
-      .map((item) => item.model);
+    setModels(carJson.filter((item) => item.make === value).map((item) => item.model));
     setSelectedMake(value);
-    setModels(filteredModels);
-    setSelectedModel("");
+    setSelectedModel('');
   };
 
   const handleModelChange = (value) => {
     setSelectedModel(value);
   };
+  const handleTypeChange = (value) => {
+    setSelectedType(value);
+  };
 
   return (
-    <div className='w-full h-full p-5 bg-slate-600'>
+    <div className='flex justify-center'>
+      <div className='max-w-2xl h-full p-5 bg-black/60 rounded-xl text-white'>
       <Form name="basic" form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item label="Зураг">
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
-          >
-            {uploadButton}
-          </Upload>
-        </Form.Item>
-        <Row gutter={[10, 0]}>
-          <Col span={12}>
-            <Form.Item 
-              label="Үйлдвэрлэгч"
-              name="brandType"
-              rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
-              >
-              <Select
-                placeholder="Үйлдвэрлэгчийг сонгоно уу"
-                style={{ width: 200 }}
-                showSearch
-                onChange={handleMakeChange}
-                value={carJson.selectedMake}
-              >
-                {makes.map(item => (
-                  <Select.Option key={item} value={item}>
-                    {item}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item 
-              label="Марк"
-              name="name"
-              rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
-              >
-              <Select
-                placeholder="Select Model"
-                style={{ width: 200 }}
-                showSearch
-                onChange={handleModelChange}
-                value={selectedModel}
-                disabled={!selectedMake}
-              >
-                {models.map(model => (
-                  <Select.Option key={model} value={model}>{model}</Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">Хадгалах</Button>
-        </Form.Item>
-      </Form>
+          <Form.Item label={<label style={{ color: "white" }}>Зураг</label>}>
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {uploadButton}
+            </Upload>
+          </Form.Item>
+          <Row gutter={[10, 0]}>
+            <Col span={8}>
+              <Form.Item 
+                label={<label style={{ color: "white" }}>Үйлдвэрлэгч</label>}
+                name="brandType"
+                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                >
+                <Select
+                  placeholder="Үйлдвэрлэгчийг сонгоно уу"
+                  showSearch
+                  onChange={handleMakeChange}
+                  value={selectedMake}
+                >
+                  {makes.map(item => (
+                    <Select.Option key={item} value={item}>
+                      {item}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item 
+                label={<label style={{ color: "white" }}>Марк</label>}
+                name="name"
+                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                >
+                <Select
+                  placeholder="Марк сонгоно уу"
+                  showSearch
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                  }
+                  onChange={handleModelChange}
+                  value={selectedModel}
+                  disabled={!selectedMake}
+                >
+                  {models.map(model => (
+                    <Select.Option key={model} value={model}>{model}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item 
+                label={<label style={{ color: "white" }}>Төрөл</label>}
+                name="type"
+                >
+                <Select
+                  placeholder="Төрөл сонгоно уу"
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                  }
+                  onChange={handleTypeChange}
+                  value={selectedType}
+                >
+                  {types.map(item => (
+                    <Select.Option key={item} value={item}>
+                      {item}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Хадгалах</Button>
+          </Form.Item>
+        </Form>
 
-      {previewImage && (
-        <Image
-          wrapperStyle={{
-            display: 'none',
-          }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(''),
-          }}
-          src={previewImage}
-        />
-      )}
-    </div>
+        {previewImage && (
+          <Image
+            wrapperStyle={{
+              display: 'none',
+            }}
+            preview={{
+              visible: previewOpen,
+              onVisibleChange: (visible) => setPreviewOpen(visible),
+              afterOpenChange: (visible) => !visible && setPreviewImage(''),
+            }}
+            src={previewImage}
+          />
+        )}
+        </div>
+      </div>
   );
 };
 

@@ -70,37 +70,6 @@ function Home() {
                           <Car car={car} index={index}/>
                         </Col>
                     )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-
                   </Row>
                 </Card>
               </Col>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import '../App.css'
 import {useAuth} from "../components/AuthProvider";
-
+import {LogoutOutlined} from '@ant-design/icons';
 const Header = () => {
   const {isLoggedIn, userName, logout} = useAuth();
   return (
@@ -31,19 +31,31 @@ const Header = () => {
                   </div>
                 </>
             }
-            <div>
-              {
-                isLoggedIn ?
-                  <div>Сайн байна уу ? {userName}</div> :
+            {isLoggedIn &&
+              <div>
+                <a href="/CarForm">
+                  <button>
+                    Зар нэмэх
+                  </button>
+                </a>
+              </div>
+            }
+            {
+              isLoggedIn ?
+                <div>{userName}</div> :
+                <div>
                   <a href="/login">
                     <button>
                       Нэвтрэх
                     </button>
                   </a>
-              }
-            </div>
-            {isLoggedIn && <div className="ml-10" >
-              <button onClick={logout}>Гарах</button>
+                </div>
+            }
+            {isLoggedIn && <div>
+              <button onClick={logout} className='logout'>
+                <LogoutOutlined />
+                <span className='logoutText'>Гарах</span>
+              </button>
             </div>}
           </div>
         </div>

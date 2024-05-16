@@ -7,7 +7,7 @@ export default function Car(car, index){
     }, []);
   return (
       <div className="carProf">
-          <img width={220}
+          <img width={260}
                src={`${car.car.base64Url}`}
                alt=""/>
           <p>{car.car.name}</p>
