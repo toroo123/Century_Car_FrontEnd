@@ -3,6 +3,7 @@ import axios from "axios";
 import Car from "../components/Car";
 import {useAuth} from "../components/AuthProvider";
 import {Card, Col, Row, Tabs} from "antd";
+import { Link } from 'react-router-dom';
 
 function Home() {
   const {user, isLoggedIn} = useAuth()
@@ -32,8 +33,8 @@ function Home() {
     </Row>,
     suggestedCars: <p>app content</p>,
   };
-
-
+ 
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,40 +44,34 @@ function Home() {
         console.error('Error fetching data:', error);
       }
     };
-
+ 
     fetchData();
   }, []);
   return (
     <ul>
-      {/* {cars.map((car, index) => ( */}
       {isLoggedIn &&
           <>
-            <Row gutter={[30,0]} style={{maxHeight: "calc(100vh - 250px)"}}>
-              <Col span={15}>
-                <Card title="Зар" style={{maxHeight: "calc(100vh - 190px)", overflow: "auto"}}>
-                  <Row gutter={[20,20]}>
+            <Row gutter={[30,0]} style={{ backgroundColor:'white'}}>
+              <Col span={18}>
+                <Card title="Зар" style={{}}>
+                  <Row gutter={[20,20]}>                    
                     {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
-                        </Col>
-                    )}
-                    {cars?.map((car, index) =>
-                        <Col span={6}>
-                          <Car car={car} index={index}/>
+                        <Col xl={6} lg={6} md={6}>
+                          <Link to={`/car/${car.id}`}>
+                            {console.log("dd",`${car.id}`)}
+                            <Car car={car} index={index} />
+                          </Link>
                         </Col>
                     )}
                   </Row>
                 </Card>
               </Col>
-              <Col span={9}>
+              <Col span={6}>
                 <Card
                     style={{
                       width: '100%',
+                      maxHeight: "calc(100vh - 190px)",
+                      overflow: "auto"
                     }}
                     tabList={tabListNoTitle}
                     activeTabKey={activeTabKey2}
@@ -84,10 +79,11 @@ function Home() {
                     tabProps={{
                       size: 'middle',
                     }}
+                   
                 >
                   {contentListNoTitle[activeTabKey2]}
                 </Card>
-
+ 
               </Col>
             </Row>
           </>
@@ -101,11 +97,11 @@ function Home() {
               Баталгаат машин худалдааны цогц системд тавтай морил!
             </h2>
           </>
-
+ 
       }
       {/* ))} */}
     </ul>
   )
 }
-
+ 
 export default Home;

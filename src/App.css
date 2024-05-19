@@ -18,19 +18,11 @@
 }
 
 .logout .logoutText {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
+  /* visibility: hidden; */
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
-  
-  /* Position the tooltip */
+  padding: 0px 0 0 10px;
   position: absolute;
-  z-index: 1;
-  top: -5px;
-  left: 105%;
 }
 
 .App-header {
@@ -76,7 +68,6 @@
 .fileUploadBox {
   background-color: #000000;
   width: 100%;
-  /* height:40%; */
   border-radius: 10px;
   padding: 10px 20px;
   margin-bottom: 20px;
@@ -183,9 +174,12 @@ input[type='button'] {
 .zurag {
   width: 100vw;
   height: 100vh;
-  background-image: url("./asset/img/background.jpg");
+  background-image: url("./asset/img/background.webp");
   background-size: cover;
   background-position: center;
+}
+.zuragBox{
+  /* background-color: rgb(0,0,0,0.1) */
 }
 
 .logo {
@@ -270,10 +264,11 @@ input[type='button'] {
 
 
 .headers {
-  height: 12vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
-  padding: 50px;
+  backdrop-filter: blur(10px);
+  padding: 30px 0 20px 0 ;
   margin-left: 300px;
   margin-right: 300px;
   color: white;
@@ -640,16 +635,15 @@ input[type='button'] {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255);
   font-size: 14px;
   line-height: 1.5714285714285714;
   list-style: none;
   font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
   position: relative;
-  background: rgba(0, 0, 0, 0.72);
+  /* background: rgba(0, 0, 0, 0.72); */
   border-radius: 15px;
   border: none;
-  box-shadow: 0px 0px 100px #00414e;
 }
 :where(.css-dev-only-do-not-override-1okl62o).ant-tabs .ant-tabs-tab{
   position: relative;
@@ -663,7 +657,6 @@ input[type='button'] {
   border: 0;
   outline: none;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.88);
 }
 ::-webkit-scrollbar {
    display: none;
@@ -675,7 +668,6 @@ input[type='button'] {
   min-height: 56px;
   margin-bottom: -1px;
   padding: 0 24px;
-  color: rgba(255, 255, 255, 0.88);
   font-weight: 600;
   font-size: 16px;
   background: transparent;
@@ -690,4 +682,24 @@ input[type='button'] {
   white-space: nowrap;
   text-overflow: ellipsis;
   text-align: start;
+}
+:where(.css-dev-only-do-not-override-1okl62o).ant-card .ant-card-meta-title {
+  color: rgba(255, 255, 255);
+  font-weight: 600;
+  font-size: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+:where(.css-dev-only-do-not-override-1okl62o).ant-card .ant-card-meta-description {
+  color: rgba(255, 255, 255);
+}
+:where(.css-dev-only-do-not-override-1okl62o).ant-card .ant-card-meta-detail {
+  /* overflow: hidden; */
+  display: block;
+}
+
+.cardDesc{
+  display:flex;
+  justify-content: start;
 }

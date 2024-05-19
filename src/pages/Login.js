@@ -25,7 +25,7 @@ function LoginPage() {
   return (
     <div className="loginBox">
       <div className="login signIn">
-        <p className="text-sky-500 font-extrabold text-2xl">Нэвтрэх</p>
+        <p className="text-sky-500 font-extrabold text-2xl pb-4">Нэвтрэх</p>
         {/*<p className="text-white py-4">Хэрэглэгчийн нэр, нууц үгээ оруулна уу.</p>*/}
         <div className="div-center">
           <Form

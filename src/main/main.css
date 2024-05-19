@@ -1,8 +1,9 @@
 .footer{
-    height: 12vh;
+    height: 8vh;
     display: flex;
     justify-content: center;
-    padding: 50px;
+    align-items : end;
+    /* padding: 50px; */
     margin-left: 300px;
     margin-right: 300px;
     color:  white;

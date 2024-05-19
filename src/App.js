@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import MainLayout from "./MainLayout";
 import Guide from "./pages/Guide";
 import About from "./pages/About";
-import Favorite from "./pages/Favorite";
+import CarDetails from "./components/CarDetail";
 import CarForm from "./components/CarForm";
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
           <Route path="/about" element={<MainLayout><About/></MainLayout>}/>
           {/* <Route path="/favorite" element={<MainLayout><Favorite/></MainLayout>}/> */}
           <Route path="/CarForm" element={<MainLayout><CarForm/></MainLayout>}/>
+          <Route path="/car/:id" element={<MainLayout><CarDetails/></MainLayout>}/>
         </Routes>
       </Router>
     </div>
