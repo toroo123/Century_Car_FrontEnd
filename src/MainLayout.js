@@ -28,7 +28,7 @@ const MainLayout = ({ children }) => {
         </div>
 
         {/* Footer */}
-        <div className="text-white flex items-end justify-center">
+        <div className="text-white flex items-center justify-center">
           <Footer/>
         </div>
       </div>
