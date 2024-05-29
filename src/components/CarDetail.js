@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Card ,Carousel, Button } from 'antd';
+import { Card ,Carousel, Button, Divider } from 'antd';
 import { FaCircleChevronRight, FaCircleChevronLeft } from "react-icons/fa6";
 
 const CarDetail = () => {
@@ -62,8 +62,8 @@ const CarDetail = () => {
 }
 
   return (
-    <div style={{ padding: '20px', width: 800 }}>
-        <Card title={`${car.brandType} ${car.name}`} bordered={false} style={{ width: 600, backgroundColor: 'gray' }}>
+    <div style={{ padding: '20px', width:'100%', display:'flex', justifyContent:'center' }}>
+        <Card title={`${car.brandType} ${car.name}`} bordered={false} style={{ width: 600}} className='bg-black/60' headStyle={{ color: '#ffffff' , font:'30px'}}>
             <Carousel arrows {...settings}  prevArrow={<SlickArrowLeft />} nextArrow={<SlickArrowRight />} infinite={false}>
                 {car?.carImage?.map((image, index) => (
                     <div key={index}>
@@ -73,11 +73,26 @@ const CarDetail = () => {
                     </div>
                 ))}
             </Carousel>
-            <div className="carDetails">
-                <p>{`Color: ${car.color}`}</p>
-                <p>{`Price: ${car.price}.0 million`}</p>
-                <p>{`Year: ${car.year}/${car.comeYear}`}</p>
-                <p>{`Motor Power: ${car.motorPower} ${car.type}`}</p>
+            <div className="text-lg text-gray-100 pt-4 inline-grid grid-cols-1 justify-items-start">
+                <p>{`Үйлдвэрлэгч : ${car.countryName}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Марк : ${car.name}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Өнгө : ${car.color}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Арлын дугаар : ${car.motorNumber}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Хаалга : ${car.seatNumber}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Үнэ : ${car.price}.0 сая`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Он : ${car.year} / ${car.comeYear}`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Гүйлт : ${car.km} km`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Гүйлт : ${car.km} km`}</p>
+                <Divider className='m-0' style={{ borderLeft: '400px solid white' }}/>
+                <p>{`Мотор : ${car.motorPower} ${car.fuelType}`}</p>
             </div>
         </Card>
     </div>

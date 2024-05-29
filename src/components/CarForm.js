@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Image, Upload, Form, message, Button, Col, Row, Select, DatePicker, Input} from 'antd';
-import carJson from '../json/car.json';
-import typeJson from '../json/type.json';
+import { PlusOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Image, Upload, Form, message, Button, Col, Row, Tag, DatePicker, Input} from 'antd';
 import axios from 'axios';
-import contextLogin from '../ContextLogin';
+import moment from 'moment';
+import Moment from 'react-moment';
  
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -19,13 +18,16 @@ const CarForm = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState([]);
-  const [selectedMake, setSelectedMake] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedModel, setSelectedModel] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [models, setModels] = useState([]);
+  const [carNumber, setCarNumber] = useState('');
+  const [startDate,setStartDate] = useState(moment());
+  const [checkDate,setCheckDate] = useState(moment());
+  const [expireDate,setExpireDate] = useState(moment());
+  const [componentDisabled, setComponentDisabled] = useState(true);
+  const [passed, setPassed] = useState(null);
+  const [color, setColor] = useState("transparent");
   const [messageApi, contextHolder] = message.useMessage();
   const key = 'updatable';
+  const dateFormat = 'YYYY/MM/DD';
  
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -48,8 +50,6 @@ const CarForm = () => {
       </div>
     </button>
   );
-  const makes = [...new Set(carJson.map((item) => item.make))];
-  const types = [...new Set(typeJson.map((item) => item.type))];
  
   const openMessage = () => {
     messageApi.open({
@@ -66,6 +66,36 @@ const CarForm = () => {
       });
     }, 1000);
   };
+  const openMessage2 = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Автомашиныг хайж байна...',
+    });
+    setTimeout(() => {
+      messageApi.open({
+        key,
+        type: 'success',
+        content: 'Хайлт амжилттай',
+        duration: 2,
+      });
+    }, 600);
+  };
+  const openMessage3 = () => {
+    messageApi.open({
+      key,
+      type: 'loading',
+      content: 'Автомашиныг хайж байна...',
+    });
+    setTimeout(() => {
+      messageApi.open({
+        key,
+        type: 'error',
+        content: 'Авто машины дугаар оруулна уу!!!',
+        duration: 2,
+      });
+    }, 600);
+  };
  
   const onFinish = async(formValue) => {
     try {
@@ -73,17 +103,21 @@ const CarForm = () => {
       fileList?.forEach((file) => {
         formData.append("fileList", file.originFileObj, file.name);
       });
-      formData.append("brandType", formValue.brandType);
-      formData.append("name", formValue.name);
-      formData.append("type", formValue.type);
-      formData.append("carYear", formValue.carYear);
-      formData.append("comeYear", formValue.comeYear);
-      formData.append("motorPower", formValue.motorPower);
-      formData.append("motorNumber", formValue.motorNumber);
-      formData.append("seatNumber", formValue.seatNumber);
-      formData.append("doorNumber", formValue.doorNumber);
-      formData.append("color", formValue.color);
+      formData.append("markName", formValue.markName);
+      formData.append("modelName", formValue.modelName);
+      formData.append("countryName", formValue.countryName);
+      formData.append("buildYear", formValue.buildYear);
+      formData.append("importYear", formValue.importYear);
+      formData.append("capacity", formValue.capacity);
+      formData.append("cabinNumber", formValue.cabinNumber);
+      formData.append("manCount", formValue.manCount);
+      formData.append("colorName", formValue.colorName);
+      formData.append("fuelType", formValue.fuelType);
+      formData.append("passed", formValue.passed);
+      formData.append("checkDate", formValue.checkDate);
+      formData.append("expireDate", formValue.expireDate);
       formData.append("price", formValue.price);
+      formData.append("phone", formValue.phone);
       formData.append("km", formValue.km);
       
  
@@ -97,24 +131,58 @@ const CarForm = () => {
       console.log(error.response.data.message);
     };
   };
- 
-  const handleMakeChange = (value) => {
-    setModels(carJson.filter((item) => item.make === value).map((item) => item.model));
-    setSelectedMake(value);
-    setSelectedModel('');
-  };
- 
-  const handleModelChange = (value) => {
-    setSelectedModel(value);
-  };
-  const handleTypeChange = (value) => {
-    setSelectedType(value);
-  };
+  
+  const searchCar = async() => {
+    console.log(carNumber)
+    let plateNumber = carNumber;
+    try {
+      await axios.get('http://localhost:8081/car/getCarXypData', {params: {plateNumber}})
+        .then((result) => {
+          openMessage2();
+          setComponentDisabled(false);
+          setStartDate(moment(result.data.importDate));
+          setCheckDate(moment(result.data.inspectionData.checkDate));
+          setExpireDate(moment(result.data.inspectionData.expireDate));
+          setPassed(result.data.inspectionData.passed);
+          setColor("white");
+          form.setFieldsValue({
+            markName: result.data.markName,
+            modelName: result.data.modelName,
+            countryName: result.data.countryName,
+            buildYear: result.data.buildYear,
+            importYear: moment(result.data.importDate),
+            colorName: result.data.colorName,
+            capacity: result.data.capacity,
+            manCount: result.data.manCount,
+            fuelType: result.data.fuelType,
+            cabinNumber: result.data.cabinNumber,
+            checkDate: moment(result.data.inspectionData.checkDate),
+            expireDate: moment(result.data.inspectionData.expireDate),
+            passed:result.data.inspectionData.passed,
+          });
+          console.log("field",form.getFieldsValue());
+        })
+    }catch(error) {
+      openMessage3();
+      setComponentDisabled(true);
+      console.log(error.response.data.message);
+    };
+
+  }
  
   return (
     <div className='flex justify-center'>
       <div className='max-w-2xl h-full p-5 bg-black/60 rounded-xl text-white'>
-      <Form name="basic" form={form} layout="vertical" onFinish={onFinish}>
+      <Row gutter={[10, 8]} className='pb-4'>
+        <Col span={14}>
+          <p className='pb-3 text-yellow-200'>Авто машины улсын дугаарыг оруулж хайна уу.</p>
+          <Input onChange={e => setCarNumber(e.target.value)} />
+        </Col>
+        <Col span={10}>
+          <Button type="primary" onClick={searchCar} className='mt-8'>Хайх</Button>
+        </Col>
+      </Row>
+      <Form name="basic" form={form} layout="vertical" onFinish={onFinish} disabled={componentDisabled}>
           <Form.Item label={<label style={{ color: "white" }}>Зураг</label>}>
           {contextHolder}
             <Upload
@@ -126,137 +194,97 @@ const CarForm = () => {
               {uploadButton}
             </Upload>
           </Form.Item>
+          
           <Row gutter={[10, 0]}>
             <Col span={8}>
               <Form.Item
                 label={<label style={{ color: "white" }}>Үйлдвэрлэгч</label>}
-                name="brandType"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                name="markName"
                 >
-                <Select
-                  placeholder="Үйлдвэрлэгчийг сонгоно уу"
-                  showSearch
-                  onChange={handleMakeChange}
-                  value={selectedMake}
-                >
-                  {makes.map(item => (
-                    <Select.Option key={item} value={item}>
-                      {item}
-                    </Select.Option>
-                  ))}
-                </Select>
+                  <Input/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Марк</label>}
-                name="name"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                label={<label style={{ color: "white" }}>Загвар</label>}
+                name="modelName"
                 >
-                <Select
-                  placeholder="Марк сонгоно уу"
-                  showSearch
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  onChange={handleModelChange}
-                  value={selectedModel}
-                  disabled={!selectedMake}
-                >
-                  {models.map(model => (
-                    <Select.Option key={model} value={model}>{model}</Select.Option>
-                  ))}
-                </Select>
+                <Input/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Төрөл</label>}
-                name="type"
+                label={<label style={{ color: "white" }}>Үйлдвэрлэсэн улс</label>}
+                name="countryName"
                 >
-                <Select
-                  placeholder="Төрөл сонгоно уу"
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                  }
-                  onChange={handleTypeChange}
-                  value={selectedType}
-                >
-                  {types.map(item => (
-                    <Select.Option key={item} value={item}>
-                      {item}
-                    </Select.Option>
-                  ))}
-                </Select>
+                <Input/>
               </Form.Item>
-            </Col>
+            </Col> 
           </Row>
           <Row gutter={[10, 0]}>
             <Col span={8}>
               <Form.Item
                 label={<label style={{ color: "white" }}>Үйлдвэрлэсэн он</label>}
-                name="carYear"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                name="buildYear"
                 >
-                  <DatePicker picker="month" placeholder='Үйлдвэрлэсэн он' style={{backgroundColor:'white'}}/>
+                  <Input readOnly={true}/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Орж ирсэн он/сар</label>}
-                name="comeYear"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                label={<label style={{ color: "white"}}>Орж ирсэн он/сар</label>}
+                name="importYear"
                 >
-                  <DatePicker picker="month" placeholder='Орж ирсэн он/сар' style={{backgroundColor:'white'}}/>
+                  <DatePicker  
+                    selected={startDate ? moment(startDate, 'DD-MM-YYYY') : null} 
+                    dateFormat={dateFormat} 
+                    style={{width:'100%', backgroundColor: color}}
+                    disabled
+                  />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Хөд/багтаамж</label>}
-                name="motorPower"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                label={<label style={{ color: "white" }}>Өнгө</label>}
+                name="colorName"
                 >
-                <Input/>
+                <Input readOnly={true}/>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[10, 0]}>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Өнгө</label>}
-                name="color"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                label={<label style={{ color: "white" }}>Хөдөлгүүрийн багтаамж</label>}
+                name="capacity"
                 >
-                  <Input placeholder='Өнгө оруулна уу'/>
+                  <Input readOnly={true}/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 label={<label style={{ color: "white" }}>Суудлын тоо</label>}
-                name="seatNumber"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                name="manCount"
                 >
-                  <Input placeholder='Суудлын тоо оруулна уу'/>
+                  <Input readOnly={true}/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                label={<label style={{ color: "white" }}>Хаалганы тоо</label>}
-                name="doorNumber"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                label={<label style={{ color: "white" }}>Шатахууны төрөл</label>}
+                name="fuelType"
                 >
-                  <Input placeholder='Хаалганы тоо оруулна уу'/>
+                  <Input readOnly={true}/>
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={[10, 0]}>
-          <Col span={8}>
+            <Col span={8}>
               <Form.Item
                 label={<label style={{ color: "white" }}>Арлын дугаар</label>}
-                name="motorNumber"
-                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                name="cabinNumber"
                 >
-                  <Input placeholder='Арлын дугаар оруулна уу'/>
+                  <Input readOnly={true}/>
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -277,7 +305,59 @@ const CarForm = () => {
                   <Input placeholder='Үнэ оруулна уу'/>
               </Form.Item>
             </Col>
-            
+          </Row>
+          <Row gutter={[10, 0]}>
+            <Col span={8}>
+              <Form.Item
+                label={<label style={{ color: "white" }}>Үзлэгт орсон огноо</label>}
+                name="checkDate"
+                >
+                  <DatePicker 
+                    selected={checkDate ? moment(checkDate, 'DD-MM-YYYY') : null} 
+                    dateFormat={dateFormat} 
+                    disabled
+                    style={{width:'100%', backgroundColor: color}}
+                  />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={<label style={{ color: "white" }}>Үзлэгт дахин орох огноо</label>}
+                name="expireDate"
+                >
+                  <DatePicker 
+                    selected={expireDate ? moment(expireDate, 'DD-MM-YYYY') : null} 
+                    dateFormat={dateFormat} 
+                    disabled
+                    style={{width:'100%', backgroundColor: color}}
+                  />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={<label style={{ color: "white" }}>Тэнцсэн эсэх</label>}
+                name="passed"
+                >
+                {passed && 
+                  ({passed} ?
+                  (<Tag icon={<CheckCircleOutlined />} color="success" className='text-lg font-medium rounded-2xl'>
+                    Тэнцсэн
+                  </Tag>) :
+                  (<Tag icon={<CloseCircleOutlined />} color="error" className='text-lg font-medium rounded-2xl'>
+                    Тэнцээгүй
+                  </Tag>))
+                }
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label={<label style={{ color: "white" }}>Утасны дугаар</label>}
+                name="phone"
+                rules={[{required: true, message: "Заавал бөглөнө үү!"}]}
+                >
+                <Input placeholder='Утасны дугаар оруулна уу'/>
+              </Form.Item>
+            </Col>
           </Row>
           <Form.Item>
             <Button type="primary" htmlType="submit">Хадгалах</Button>

@@ -2,13 +2,14 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Car from "../components/Car";
 import {useAuth} from "../components/AuthProvider";
-import {Card, Col, Row, List, Divider} from "antd";
+import {Card, Col, Row, List, Divider, Tag} from "antd";
 import { Link } from 'react-router-dom';
-
+ 
 function Home() {
   const {user, isLoggedIn} = useAuth()
   console.log(user?.role)
-  const [cars, setCars] = useState([])
+  const [cars, setCars] = useState([]);
+  const [favCars, setFavCars] = useState([]);
   const [activeTabKey2, setActiveTabKey2] = useState('likedCars');
   const onTab2Change = (key) => {
     setActiveTabKey2(key);
@@ -18,32 +19,40 @@ function Home() {
       label: 'Таалагдсан',
       key: 'likedCars'
     },
-    {
-      label: 'Санал болгох',
-      key: 'suggestedCars'
-    },
+    // {
+    //   label: 'Санал болгох',
+    //   key: 'suggestedCars'
+    // },
   ];
   const contentListNoTitle = {
-    likedCars: 
+    likedCars:
     <Row gutter={[10, 10]}>
           <Col span={24}>
             <List
               itemLayout="horizontal"
-              dataSource={cars}
+              dataSource={favCars}
               renderItem={(item, index) => (
                 <List.Item>
                   <Row gutter={[10, 10]}>
-                    <Col span={10}>
-                    <img alt="" src={`${item.carImage[0]?.base64Url}`} />
-                    
+                    <Col span={12}>
+                    <img alt="" src={`${item.car.carImage[0]?.base64Url}`} />
+                    {item.car?.passed && 
+                      <Tag color="success" className='absolute top-2 left-2 text-xs font-medium rounded-lg bg-transparent' bordered={false}>
+                          Оношилгоотой
+                      </Tag>
+                    }
                     </Col>
-                    <Col span={14}>
+                    <Col span={12}>
                     <div className="flex-col">
-                      <div className="flex flex-nowrap text-lg font-medium whitespace-nowrap">{item?.brandType + " "+  item?.name + " , " + item?.color}</div>
-                      <div className="flex justify-start mb-2 text-base">{ 'Үнэ : ' + " " + item?.price + '.0 сая'}</div>
+                      <div className="flex flex-nowrap text-lg font-medium whitespace-nowrap">{item.car?.brandType + " "+  item?.car.name + " , " + item?.car.color}</div>
+                      <div className="flex justify-start mb-2 text-base">{ 'Үнэ : ' + " " + item?.car.price + '.0 сая'}</div>
                       <div className="flex">
-                        <div className=" bg-red-600 px-3 mr-3 rounded-md text-white">{item?.year +"/"+  item?.comeYear}</div>
-                        <p className="flex justify-start">{ item?.motorPower + " , " + item?.type}</p>
+                        {/* <div className=" bg-red-600 px-3 mr-3 rounded-md text-white">{item?.year +"/"+  item?.comeYear}</div> */}
+                        <div className="cardYear">
+                          <div className="text-white">{item.car?.year}</div>
+                          <div className="text-white">{item.car?.comeYear}</div>
+                      </div>
+                        <p className="flex justify-start">{ item?.car.motorPower + " , " + item.car?.fuelType}</p>
                       </div>
                     </div>
                     </Col>
@@ -56,44 +65,65 @@ function Home() {
     suggestedCars: <p>app content</p>,
   };
  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/car/getAllCar');
+      setCars(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+ 
+  const getFavData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/car/getAllFavoriteCar');
+      setFavCars(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const setFavorite = (event) => {
+    console.log('test')
+  }
  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8081/car/getAllCar');
-        setCars(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
  
+    getFavData();
     fetchData();
   }, []);
   return (
     <ul>
       {isLoggedIn &&
           <>
-            <Row gutter={[30,0]} style={{ backgroundColor:'white'}}>
+            <Row gutter={[30,0]} style={{  paddingBottom:220, paddingLeft:20, paddingRight:20}} className='bg-black/60'>
               <Col span={18}>
-                <Card title="Зар" style={{}}>
+                <div className="">
+                  <p className="text-3xl text-red flex justify-start font-medium  pt-3 text-gray-200">Машины зар</p>
+                  <Divider style={{ borderLeft: '1px solid red' }} />
                   <Row gutter={[20,20]}>                    
                     {cars?.map((car, index) =>
                         <Col xl={6} lg={6} md={6}>
-                          <Link to={`/car/${car.id}`}>
-                            {console.log("dd",`${car.id}`)}
-                            <Car car={car} index={index} />
+                          <Link to={`/car/${car.id}`} onClick={(event) => {
+                              console.log(event)
+                              event.stopPropagation()
+                            }}>
+                            <Car car={car} index={index} setFavorite={() => {car.favorite = !car.favorite; getFavData()}} />
                           </Link>
                         </Col>
                     )}
                   </Row>
-                </Card>
+                </div>
               </Col>
               <Col span={6}>
                 <Card
                     style={{
                       width: '100%',
                       maxHeight: "calc(100vh - 190px)",
-                      overflow: "auto"
+                      overflow: "auto",
+                      marginTop:30, 
+                      paddingRight:20,
+                      background:'#929dad'
                     }}
                     tabList={tabListNoTitle}
                     activeTabKey={activeTabKey2}
