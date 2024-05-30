@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import Car from "../components/Car";
 import {useAuth} from "../components/AuthProvider";
-import {Card, Col, Row, List, Divider, Tag} from "antd";
-import { Link } from 'react-router-dom';
- 
+import {Card, Col, Divider, List, Row, Space, Tag, Typography} from "antd";
+import {Link} from 'react-router-dom';
+import {CarNew} from "../components/CarNew";
+import Car from "../components/Car";
+import {currencyFormat} from "../asset/tools";
+
 function Home() {
   const {user, isLoggedIn} = useAuth()
   console.log(user?.role)
@@ -24,47 +26,52 @@ function Home() {
     //   key: 'suggestedCars'
     // },
   ];
+
+  const getDtlInfo = (title, desc) => {
+    return (
+      <Space>
+        <b>{title}:</b>
+        <span>{desc}</span>
+      </Space>
+    )
+  }
   const contentListNoTitle = {
     likedCars:
-    <Row gutter={[10, 10]}>
-          <Col span={24}>
-            <List
-              itemLayout="horizontal"
-              dataSource={favCars}
-              renderItem={(item, index) => (
-                <List.Item>
-                  <Row gutter={[10, 10]}>
-                    <Col span={12}>
-                    <img alt="" src={`${item.car.carImage[0]?.base64Url}`} />
-                    {item.car?.passed && 
-                      <Tag color="success" className='absolute top-2 left-2 text-xs font-medium rounded-lg bg-transparent' bordered={false}>
-                          Оношилгоотой
+      <Row gutter={[10, 10]}>
+        <Col span={24}>
+          <List
+            itemLayout="horizontal"
+            dataSource={favCars}
+            renderItem={(item, index) => (
+              <List.Item>
+                <Row gutter={[10, 10]}>
+                  <Col span={12}>
+                    <img alt="" src={`${item.car.carImage[0]?.base64Url}`} style={{borderRadius: "8px"}}/>
+                    {item.car?.passed &&
+                      <Tag color="success"
+                           className='absolute top-2 left-2 text-xs font-medium rounded-lg bg-transparent'
+                           bordered={false}>
+                        Оношилгоотой
                       </Tag>
                     }
-                    </Col>
-                    <Col span={12}>
-                    <div className="flex-col">
-                      <div className="flex flex-nowrap text-lg font-medium whitespace-nowrap">{item.car?.brandType + " "+  item?.car.name + " , " + item?.car.color}</div>
-                      <div className="flex justify-start mb-2 text-base">{ 'Үнэ : ' + " " + item?.car.price + '.0 сая'}</div>
-                      <div className="flex">
-                        {/* <div className=" bg-red-600 px-3 mr-3 rounded-md text-white">{item?.year +"/"+  item?.comeYear}</div> */}
-                        <div className="cardYear">
-                          <div className="text-white">{item.car?.year}</div>
-                          <div className="text-white">{item.car?.comeYear}</div>
-                      </div>
-                        <p className="flex justify-start">{ item?.car.motorPower + " , " + item.car?.fuelType}</p>
-                      </div>
-                    </div>
-                    </Col>
-                  </Row>
-                </List.Item>
-              )}
-            />
-          </Col>
-    </Row>,
+                  </Col>
+                  <Col span={12} style={{textAlign: "start"}}>
+                    <Typography.Title level={5}>{item.car?.brandType + " " + item?.car.name}</Typography.Title>
+                    {getDtlInfo("Үнэ", currencyFormat(item?.car.price))}
+                    {getDtlInfo("Өнгө", item?.car.color)}
+                    {getDtlInfo("Он", item.car?.year + " / " + item.car?.comeYear)}
+                    {getDtlInfo("Хөдөлгүүр", item?.car.motorPower + "cc")}
+                    {getDtlInfo("Төрөл", item?.car.fuelType)}
+                  </Col>
+                </Row>
+              </List.Item>
+            )}
+          />
+        </Col>
+      </Row>,
     suggestedCars: <p>app content</p>,
   };
- 
+
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:8081/car/getAllCar');
@@ -73,7 +80,7 @@ function Home() {
       console.error('Error fetching data:', error);
     }
   };
- 
+
   const getFavData = async () => {
     try {
       const response = await axios.get('http://localhost:8081/car/getAllFavoriteCar');
@@ -86,76 +93,73 @@ function Home() {
   const setFavorite = (event) => {
     console.log('test')
   }
- 
+
   useEffect(() => {
- 
+
     getFavData();
     fetchData();
   }, []);
+
+  if (!isLoggedIn)
+    return (
+      <>
+        <div className="title-brand">
+          <h1 className="presentation-title">Century Car</h1>
+        </div>
+        <h2 className="presentation-subtitle text-center">
+          Баталгаат машин худалдааны цогц системд тавтай морил!
+        </h2>
+      </>
+    )
+
   return (
-    <ul>
-      {isLoggedIn &&
-          <>
-            <Row gutter={[30,0]} style={{  paddingBottom:220, paddingLeft:20, paddingRight:20}} className='bg-black/60'>
-              <Col span={18}>
-                <div className="">
-                  <p className="text-3xl text-red flex justify-start font-medium  pt-3 text-gray-200">Машины зар</p>
-                  <Divider style={{ borderLeft: '1px solid red' }} />
-                  <Row gutter={[20,20]}>                    
-                    {cars?.map((car, index) =>
-                        <Col xl={6} lg={6} md={6}>
-                          <Link to={`/car/${car.id}`} onClick={(event) => {
-                              console.log(event)
-                              event.stopPropagation()
-                            }}>
-                            <Car car={car} index={index} setFavorite={() => {car.favorite = !car.favorite; getFavData()}} />
-                          </Link>
-                        </Col>
-                    )}
-                  </Row>
-                </div>
-              </Col>
-              <Col span={6}>
-                <Card
-                    style={{
-                      width: '100%',
-                      maxHeight: "calc(100vh - 190px)",
-                      overflow: "auto",
-                      marginTop:30, 
-                      paddingRight:20,
-                      background:'#929dad'
-                    }}
-                    tabList={tabListNoTitle}
-                    activeTabKey={activeTabKey2}
-                    onTabChange={onTab2Change}
-                    tabProps={{
-                      size: 'middle',
-                    }}
-                   
-                >
-                  <div style={{ height: "100%", overflowY: "auto" }}>
-                    {contentListNoTitle[activeTabKey2]}
-                  </div>
-                </Card>
- 
-              </Col>
-            </Row>
-          </>
-      }
-      {!isLoggedIn &&
-          <>
-            <div className="title-brand">
-              <h1 className="presentation-title">Century Car</h1>
-            </div>
-            <h2 className="presentation-subtitle text-center">
-              Баталгаат машин худалдааны цогц системд тавтай морил!
-            </h2>
-          </>
- 
-      }
-      {/* ))} */}
-    </ul>
+    <Row gutter={[16, 16]}
+         style={{paddingBottom: 128, paddingLeft: 20, paddingRight: 20, margin: "0 50px", borderRadius: 10, maxHeight: "calc(80vh)"}}
+         className='bg-black/60'>
+      <Col span={24}>
+        <p className="text-3xl text-red flex justify-start font-medium  pt-3 text-gray-200">Машины зар</p>
+      </Col>
+      <Col span={18} style={{overflow: "scroll", maxHeight: "calc(69vh)"}}>
+        <Row gutter={[20, 20]}>
+          {cars?.map((car, index) =>
+            <Col xl={6} lg={6} md={6}>
+              <Link to={`/car/${car.id}`} onClick={(event) => {
+                console.log(event)
+                event.stopPropagation()
+              }}>
+                <CarNew car={car} index={index} setFavorite={() => {
+                  car.favorite = !car.favorite;
+                  getFavData()
+                }}/>
+              </Link>
+            </Col>
+          )}
+        </Row>
+      </Col>
+      <Col span={6}>
+        <Card
+          style={{
+            width: '100%',
+            maxHeight: "calc(100vh - 190px)",
+            overflow: "auto",
+            background: '#929dad',
+            position: "sticky"
+          }}
+          title="Таалагдсан"
+          // tabList={tabListNoTitle}
+          // activeTabKey={activeTabKey2}
+          // onTabChange={onTab2Change}
+          tabProps={{
+            size: 'middle',
+          }}
+        >
+          <div  style={{overflow: "scroll", height: "calc(58vh)"}}>
+            {contentListNoTitle[activeTabKey2]}
+          </div>
+        </Card>
+      </Col>
+    </Row>
   )
 }
- 
+
 export default Home;
